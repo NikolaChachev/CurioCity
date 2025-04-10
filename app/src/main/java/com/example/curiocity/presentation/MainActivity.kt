@@ -1,23 +1,22 @@
-package com.example.curiocity
+package com.example.curiocity.presentation
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.curiocity.R
 import com.example.curiocity.databinding.ActivityMainBinding
+import com.example.curiocity.presentation.architecture.activity.CurioActivity
+import com.example.curiocity.presentation.architecture.vm.CurioViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
+@AndroidEntryPoint
+class MainActivity : CurioActivity<ActivityMainBinding, CurioViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
 
@@ -31,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
     }
+
+    override fun getLayoutId(): Int = R.layout.activity_main
+
+    override fun getViewModelClass(): Class<CurioViewModel> = CurioViewModel::class.java
 }
