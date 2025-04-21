@@ -2,4 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- HOME screen dimensions -->
+    <dimen name="home_screen_out_level_icon_size">120dp</dimen>
 </resources>

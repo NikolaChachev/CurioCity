@@ -55,6 +55,9 @@ dependencies {
     //hilt for DI
     implementation libs.hilt.android
     kapt libs.hilt.compiler
+
+    //splash screen dependency
+    implementation libs.androidx.core.splashscreen
 }
 
 // Allow references to generated code
