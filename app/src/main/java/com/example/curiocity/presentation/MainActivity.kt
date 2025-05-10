@@ -1,9 +1,9 @@
 package com.example.curiocity.presentation
 
 import android.os.Bundle
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.curiocity.R
 import com.example.curiocity.databinding.ActivityMainBinding
@@ -16,23 +16,23 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : CurioActivity<ActivityMainBinding, CurioViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         val navView: BottomNavigationView = binding.navView
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        val navController: NavController by lazy {
+            val navHost = supportFragmentManager.findFragmentById(
+                R.id.nav_host_fragment_activity_main
+            ) as NavHostFragment
+            navHost.navController
+        }
         navView.setupWithNavController(navController)
     }
 
     override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun getViewModelClass(): Class<CurioViewModel> = CurioViewModel::class.java
+
+    override fun getContainerViewId() = R.id.nav_host_fragment_activity_main
 }

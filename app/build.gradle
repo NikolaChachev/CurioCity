@@ -79,6 +79,10 @@ dependencies {
 
     // Gson for JSON conversion
     implementation libs.gson
+
+    //splash screen dependency
+    implementation libs.androidx.core.splashscreen
+
 }
 
 // Allow references to generated code
