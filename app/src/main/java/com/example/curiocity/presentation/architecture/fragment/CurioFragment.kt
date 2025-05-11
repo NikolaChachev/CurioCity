@@ -41,6 +41,7 @@ abstract class CurioFragment<B : ViewDataBinding, VM : CurioViewModel> : Fragmen
             binding.setVariable(bindResId, viewModel)
         }
 
+        viewModel.receiveNavigationArgs(arguments)
         onPrepareLayout(view)
         return view
     }

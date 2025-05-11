@@ -1,4 +1,4 @@
-package com.example.curiocity.presentation.username
+package com.example.curiocity.presentation.ui.username
 
 import android.os.Bundle
 import android.view.View
@@ -9,6 +9,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.curiocity.R
 import com.example.curiocity.databinding.FragmentLoginBinding
 import com.example.curiocity.presentation.architecture.fragment.CurioFragment
+import com.example.curiocity.presentation.ui.home.HomeFragment
+import com.example.curiocity.presentation.ui.home.HomeViewModel.Companion.USER_BUNDLE_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -50,7 +52,13 @@ class LoginFragment : CurioFragment<FragmentLoginBinding, LoginViewModel>() {
 
                         is LoginState.Success -> {
                             // Navigate to the next screen
-                            createShortToast("Login success!")
+                            val bundle = Bundle().apply {
+                                putParcelable(
+                                    USER_BUNDLE_KEY,
+                                    state.user
+                                )
+                            }
+                            navigateToView(HomeFragment::class, bundle)
                         }
 
                         is LoginState.Error -> {

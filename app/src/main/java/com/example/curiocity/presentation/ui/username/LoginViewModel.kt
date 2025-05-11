@@ -1,4 +1,4 @@
-package com.example.curiocity.presentation.username
+package com.example.curiocity.presentation.ui.username
 
 import androidx.lifecycle.viewModelScope
 import com.example.curiocity.data.local.SharedPreferencesManager
@@ -36,7 +36,7 @@ class LoginViewModel @Inject constructor(
                 _loginState.value = LoginState.Initial
                 return@launch
             }
-            _loginState.value = LoginState.Success(user.id)
+            _loginState.value = LoginState.Success(user)
         }
     }
 
@@ -53,7 +53,7 @@ class LoginViewModel @Inject constructor(
                 if (isAvailable) {
                     val user = gameRepository.createUser(username)
                     sharedPreferencesManager.saveUserUUID(user.uuid)
-                    _loginState.value = LoginState.Success(user.id)
+                    _loginState.value = LoginState.Success(user)
                 } else {
                     _loginState.value = LoginState.Error("Username already exists")
                 }
@@ -69,6 +69,6 @@ class LoginViewModel @Inject constructor(
 sealed class LoginState {
     data object Initial : LoginState()
     data object Loading : LoginState()
-    data class Success(val userId: Long) : LoginState()
+    data class Success(val user: UserEntity) : LoginState()
     data class Error(val message: String) : LoginState()
 } 

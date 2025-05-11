@@ -3,21 +3,23 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/home_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:ignore="ContentDescription">
 
         <ImageView
+            android:id="@+id/home_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/Background" />
+            android:src="@drawable/home_screen_background" />
 
         <ImageView
             android:id="@+id/home_fragment_level_3"
             android:layout_width="@dimen/home_screen_out_level_icon_size"
             android:layout_height="@dimen/home_screen_out_level_icon_size"
-            android:src="@drawable/ParisIcon"
+            android:src="@drawable/paris_icon"
             app:layout_constraintBottom_toTopOf="@id/home_fragment_level_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.75"
@@ -28,7 +30,7 @@
             android:id="@+id/home_fragment_level_2"
             android:layout_width="@dimen/home_screen_out_level_icon_size"
             android:layout_height="@dimen/home_screen_out_level_icon_size"
-            android:src="@drawable/LondonIcon"
+            android:src="@drawable/london_icon"
             app:layout_constraintBottom_toTopOf="@id/home_fragment_level_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.25"
@@ -39,11 +41,21 @@
             android:id="@+id/home_fragment_level_1"
             android:layout_width="@dimen/home_screen_out_level_icon_size"
             android:layout_height="@dimen/home_screen_out_level_icon_size"
-            android:src="@drawable/SofiaIcon"
+            android:src="@drawable/sofia_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.75"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_fragment_level_2" />
+
+        <Button
+            android:id="@+id/home_play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Play"
+            app:layout_constraintTop_toBottomOf="@id/home_fragment_level_1"
+            app:layout_constraintStart_toStartOf="@id/home_fragment_level_1"
+            app:layout_constraintEnd_toEndOf="@id/home_fragment_level_1"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
