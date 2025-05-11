@@ -3,9 +3,11 @@ package com.example.curiocity.data.repository
 import android.util.Log
 import com.example.curiocity.data.local.dao.LevelDao
 import com.example.curiocity.data.local.dao.UserDao
+import com.example.curiocity.data.local.entity.LevelEntity
 import com.example.curiocity.data.local.entity.UserEntity
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -38,13 +40,25 @@ class GameRepository @Inject constructor(
     suspend fun fetchUsers(): List<UserEntity> = withContext(Dispatchers.IO) {
         val snapshot = firebaseDatabase.reference.child("players").get().await()
         val data = snapshot.children.map { dataShot ->
-            dataShot.getValue(UserEntity::class.java)
+            dataShot.getValue(UserEntity::class.java)?.copy(uuid = dataShot.key ?: "")
         }
         val existingUsers = data.requireNoNulls()
         existingUsers.forEach {
             userDao.insertUser(it)
         }
         existingUsers
+    }
+
+    suspend fun fetchLevelsData() = withContext(Dispatchers.IO) {
+        val snapshot = firebaseDatabase.reference.child("levels").get().await()
+        val data = snapshot.children.map { dataSnapshot ->
+            dataSnapshot.getValue(LevelEntity::class.java)?.copy(levelNumber = dataSnapshot.key?.toInt() ?: 1)
+        }.requireNoNulls()
+        levelDao.insertLevels(data)
+    }
+
+    suspend fun getCurrentLevelData(level: Int): LevelEntity = withContext(Dispatchers.IO) {
+        levelDao.getLevelByNumber(level)
     }
 
     suspend fun updateUserScore(userId: Long, score: Int) = withContext(Dispatchers.IO) {

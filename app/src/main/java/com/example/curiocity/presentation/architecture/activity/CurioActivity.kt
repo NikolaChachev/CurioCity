@@ -96,10 +96,6 @@ abstract class CurioActivity<B : ViewDataBinding, VM : CurioViewModel> : AppComp
         }
         if (currentViewClassName != viewName) {
             val fm = supportFragmentManager
-            //Todo this will be uncommented when the splash screen is implemented
-//            if(currentView is SplashFragment){
-//                fm.popBackStack()
-//            }
             val existing = fm.findFragmentByTag(viewName)
             val newView: CurioFragment<*, *>? = if (existing != null) {
                 popBackStackTo(fm, viewName, args)
