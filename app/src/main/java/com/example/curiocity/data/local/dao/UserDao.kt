@@ -28,6 +28,9 @@ interface UserDao {
     @Query("UPDATE users SET currentLevel = :level WHERE id = :userId")
     suspend fun updateUserLevel(userId: Long, level: Int)
 
+    @Query("UPDATE users SET currentQuestion = :question WHERE id = :userId")
+    suspend fun updateUserQuestion(userId: Long, question: Int)
+
     @Query("DELETE FROM users WHERE username = :username")
     suspend fun deleteUserByUsername(username: String)
 } 

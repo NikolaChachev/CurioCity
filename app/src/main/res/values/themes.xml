@@ -1,13 +1,13 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.CurioCity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:windowActionBar">false</item>
@@ -15,16 +15,27 @@
         <!-- Customize your theme here. -->
 
         <item name="android:textViewStyle">@style/TextStyle</item>
+        <item name="materialButtonStyle">@style/curioButton</item>
 
     </style>
 
     <style name="SplashTheme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorSecondary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_home_black_24dp</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/paris_icon</item>
         <item name="postSplashScreenTheme">@style/Theme.CurioCity</item>
     </style>
 
     <style name="TextStyle" parent="android:Widget.TextView" >
         <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="CornerShapeForButton" parent="">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSize">20%</item>
+    </style>
+
+    <style name="curioButton" parent="Widget.Material3.Button">
+        <item name="android:textSize">16sp</item>
+        <item name="shapeAppearance">@style/CornerShapeForButton</item>
     </style>
 </resources>

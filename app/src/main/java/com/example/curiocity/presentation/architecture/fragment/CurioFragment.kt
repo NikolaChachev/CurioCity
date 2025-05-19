@@ -35,7 +35,7 @@ abstract class CurioFragment<B : ViewDataBinding, VM : CurioViewModel> : Fragmen
         val bindResId = getViewModelResId()
 
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-
+        binding.lifecycleOwner = viewLifecycleOwner //needed for databinding with xml to work
         val view = binding.root
         bindResId?.let {
             binding.setVariable(bindResId, viewModel)

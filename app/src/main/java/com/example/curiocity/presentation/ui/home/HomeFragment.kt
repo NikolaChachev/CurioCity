@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.curiocity.R
 import com.example.curiocity.databinding.FragmentHomeBinding
 import com.example.curiocity.presentation.architecture.fragment.CurioFragment
+import com.example.curiocity.presentation.ui.question.GameFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
             setImageToLocked(homeFragmentLevel2)
             setImageToLocked(homeFragmentLevel3)
             homePlayButton.setOnClickListener {
-                //navigate to game fragment
+                navigateToView(GameFragment::class)
             }
         }
     }
@@ -31,7 +32,6 @@ class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         setupObservers()
     }
-
 
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
