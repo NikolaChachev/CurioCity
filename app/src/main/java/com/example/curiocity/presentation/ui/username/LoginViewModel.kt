@@ -6,6 +6,7 @@ import com.example.curiocity.data.local.entity.UserEntity
 import com.example.curiocity.data.repository.GameRepository
 import com.example.curiocity.presentation.architecture.vm.CurioViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,19 +25,13 @@ class LoginViewModel @Inject constructor(
 
     fun checkForExistingUser() {
         viewModelScope.launch {
-            val currentUser = sharedPreferencesManager.getUserUUID()
-            cachedUsers.addAll(gameRepository.fetchUsers())
-            if (currentUser.isNullOrEmpty()) {
+            delay(20) // not sure why, but this method is being called too early. Hack it up.
+            val currentUser = gameRepository.checkForExistingUser()
+            if (!currentUser) {
                 _loginState.value = LoginState.Initial
                 return@launch
             }
-
-            val user = cachedUsers.find { it.uuid == currentUser }
-            if (user == null) {
-                _loginState.value = LoginState.Initial
-                return@launch
-            }
-            _loginState.value = LoginState.Success(user)
+            _loginState.value = LoginState.Success
         }
     }
 
@@ -51,9 +46,8 @@ class LoginViewModel @Inject constructor(
             try {
                 val isAvailable = cachedUsers.find { it.username == username } == null
                 if (isAvailable) {
-                    val user = gameRepository.createUser(username)
-                    sharedPreferencesManager.saveUserUUID(user.uuid)
-                    _loginState.value = LoginState.Success(user)
+                    gameRepository.createUser(username)
+                    _loginState.value = LoginState.Success
                 } else {
                     _loginState.value = LoginState.Error("Username already exists")
                 }
@@ -69,6 +63,6 @@ class LoginViewModel @Inject constructor(
 sealed class LoginState {
     data object Initial : LoginState()
     data object Loading : LoginState()
-    data class Success(val user: UserEntity) : LoginState()
+    data object Success : LoginState()
     data class Error(val message: String) : LoginState()
 } 

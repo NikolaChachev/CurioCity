@@ -1,13 +1,13 @@
 package com.example.curiocity.data.repository
 
 import android.util.Log
+import com.example.curiocity.data.local.SharedPreferencesManager
 import com.example.curiocity.data.local.dao.LevelDao
 import com.example.curiocity.data.local.dao.UserDao
 import com.example.curiocity.data.local.entity.LevelEntity
 import com.example.curiocity.data.local.entity.UserEntity
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -18,10 +18,22 @@ import javax.inject.Singleton
 class GameRepository @Inject constructor(
     private val userDao: UserDao,
     private val levelDao: LevelDao,
-    private val firebaseDatabase: FirebaseDatabase
+    private val firebaseDatabase: FirebaseDatabase,
+    private val sharedPreferencesManager: SharedPreferencesManager
 ) {
 
-    suspend fun createUser(username: String): UserEntity = withContext(Dispatchers.IO) {
+    lateinit var currentUser: UserEntity
+    private lateinit var usersDataList: List<UserEntity>
+
+    suspend fun checkForExistingUser(): Boolean {
+        val userId = sharedPreferencesManager.getUserUUID() ?: return false
+        usersDataList = fetchUsers()
+        val user = usersDataList.find { it.uuid == userId } ?: return false
+        currentUser = user
+        return true
+    }
+
+    suspend fun createUser(username: String) = withContext(Dispatchers.IO) {
         val uuid = UUID.randomUUID().toString()
         val user = UserEntity(
             username = username,
@@ -33,8 +45,8 @@ class GameRepository @Inject constructor(
             .child(uuid)
             .setValue(user)
             .await()
-
-        user
+        currentUser = user
+        sharedPreferencesManager.saveUserUUID(user.uuid)
     }
 
     suspend fun fetchUsers(): List<UserEntity> = withContext(Dispatchers.IO) {
@@ -52,21 +64,29 @@ class GameRepository @Inject constructor(
     suspend fun fetchLevelsData() = withContext(Dispatchers.IO) {
         val snapshot = firebaseDatabase.reference.child("levels").get().await()
         val data = snapshot.children.map { dataSnapshot ->
-            dataSnapshot.getValue(LevelEntity::class.java)?.copy(levelNumber = dataSnapshot.key?.toInt() ?: 1)
+            dataSnapshot.getValue(LevelEntity::class.java)
+                ?.copy(levelNumber = dataSnapshot.key?.toInt() ?: 1)
         }.requireNoNulls()
         levelDao.insertLevels(data)
     }
 
-    suspend fun getCurrentLevelData(level: Int): LevelEntity = withContext(Dispatchers.IO) {
+    suspend fun getCurrentLevelData(level: Int): LevelEntity? = withContext(Dispatchers.IO) {
         levelDao.getLevelByNumber(level)
     }
 
-    suspend fun updateUserScore(userId: Long, score: Int) = withContext(Dispatchers.IO) {
-        userDao.updateUserScore(userId, score)
+    suspend fun updateUserScore(score: Int) = withContext(Dispatchers.IO) {
+        currentUser = currentUser.copy(currentScore = currentUser.currentScore + score)
+        userDao.updateUserScore(currentUser.id, currentUser.currentScore)
     }
 
-    suspend fun updateUserLevel(userId: Long, level: Int) = withContext(Dispatchers.IO) {
-        userDao.updateUserLevel(userId, level)
+    suspend fun updateUserLevel(level: Int) = withContext(Dispatchers.IO) {
+        currentUser = currentUser.copy(currentLevel = level)
+        userDao.updateUserLevel(currentUser.id, level)
+    }
+
+    suspend fun updateUserQuestion(question: Int) = withContext(Dispatchers.IO) {
+        currentUser = currentUser.copy(currentQuestion = question)
+        userDao.updateUserQuestion(currentUser.id, question)
     }
 
     suspend fun syncUserWithFirebase(user: UserEntity) = withContext(Dispatchers.IO) {

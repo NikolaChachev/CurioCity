@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.curiocity.BuildConfig
 import com.example.curiocity.data.local.CurioCityDatabase
+import com.example.curiocity.data.local.SharedPreferencesManager
 import com.example.curiocity.data.local.dao.LevelDao
 import com.example.curiocity.data.local.dao.UserDao
 import com.example.curiocity.data.repository.GameRepository
@@ -53,8 +54,9 @@ object DatabaseModule {
     fun provideGameRepository(
         userDao: UserDao,
         levelDao: LevelDao,
-        firebaseDatabase: FirebaseDatabase
+        firebaseDatabase: FirebaseDatabase,
+        sharedPreferencesManager: SharedPreferencesManager
     ): GameRepository {
-        return GameRepository(userDao, levelDao, firebaseDatabase)
+        return GameRepository(userDao, levelDao, firebaseDatabase, sharedPreferencesManager)
     }
 } 

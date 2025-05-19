@@ -8,11 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <!-- Primary brand color. -->
-    <color name="colorPrimary">#FF6200EE</color>
+    <color name="colorPrimary">#71493d</color>
     <color name="colorPrimaryVariant">#FF3700B3</color>
     <color name="colorOnPrimary">#FFFFFFFF</color>
     <!-- Secondary brand color. -->
-    <color name="colorSecondary">#FF03DAC5</color>
+    <color name="colorSecondary">#c0f8fc</color>
     <color name="colorSecondaryVariant">#FF018786</color>
     <color name="colorOnSecondary">#FF000000</color>
+    <color name="popup_background_color">#e3d6b0</color>
 </resources>
