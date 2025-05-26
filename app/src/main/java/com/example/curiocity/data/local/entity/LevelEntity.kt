@@ -6,10 +6,9 @@ import com.google.firebase.database.Exclude
 
 @Entity(tableName = "levels")
 data class LevelEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
     val questions: List<QuestionEntity> = emptyList(),
     val name: String = "",
+    @PrimaryKey
     @get:Exclude
     val levelNumber: Int = 1
 )

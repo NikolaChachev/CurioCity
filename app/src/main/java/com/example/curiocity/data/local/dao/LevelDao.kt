@@ -14,9 +14,6 @@ interface LevelDao {
     @Query("SELECT * FROM levels")
     fun getAllLevels(): Flow<List<LevelEntity>>
 
-    @Query("SELECT * FROM levels WHERE id = :levelId")
-    fun getLevelById(levelId: Long): Flow<LevelEntity?>
-
     @Query("SELECT * FROM levels WHERE levelNumber = :level")
     fun getLevelByNumber(level: Int): LevelEntity?
 

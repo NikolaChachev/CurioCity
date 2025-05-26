@@ -40,6 +40,10 @@ class GameViewModel @Inject constructor(
     private val _answerD = MutableLiveData("")
     val answerD: LiveData<String> = _answerD
 
+    val currentLives: LiveData<Int> = gameRepository.currentLives
+
+    val playerScore: LiveData<Int> = gameRepository.playerScore
+
     private val _answerState = MutableSharedFlow<AnswerState>().apply { AnswerState.Loading }
     val answerState: SharedFlow<AnswerState> = _answerState.asSharedFlow()
 
@@ -116,15 +120,17 @@ class GameViewModel @Inject constructor(
     fun checkAnswer(givenAnswer: String) {
         viewModelScope.launch {
             if (correctAnswer == givenAnswer) {
-                accumulatedScore += CORRECT_ANSWER_POINTS
+                gameRepository.updateUserScore(CORRECT_ANSWER_POINTS)
                 val state =
                     if (currentQuestionIndex == levelEntity.questions.size - 1)
                         AnswerState.NoMoreQuestions
-                    else
+                    else {
                         AnswerState.AnsweredCorrectly
+                    }
                 _answerState.emit(state)
             } else {
-                accumulatedScore -= WRONG_ANSWER_POINTS
+                gameRepository.updateUserScore(WRONG_ANSWER_POINTS)
+                gameRepository.removeLifeFromPlayer()
                 _answerState.emit(AnswerState.AnsweredIncorrectly)
             }
         }
@@ -132,7 +138,7 @@ class GameViewModel @Inject constructor(
 
     companion object {
         const val CORRECT_ANSWER_POINTS = 5
-        const val WRONG_ANSWER_POINTS = 10
+        const val WRONG_ANSWER_POINTS = -10
 
     }
 } 

@@ -1,5 +1,7 @@
 package com.example.curiocity.presentation.ui.home
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.curiocity.data.repository.GameRepository
 import com.example.curiocity.presentation.architecture.vm.CurioViewModel
@@ -17,11 +19,16 @@ class HomeViewModel @Inject constructor(
 
     private val _currentLevel = MutableStateFlow(1)
     val currentLevel: StateFlow<Int> = _currentLevel.asStateFlow()
+    val currentLives: LiveData<Int> = gameRepository.currentLives
+    private val _playerScore = MutableLiveData<Int>()
+    val playerScore: LiveData<Int> = gameRepository.playerScore
 
-    init {
+
+    fun updateData() {
         viewModelScope.launch {
             gameRepository.fetchLevelsData()
             _currentLevel.emit(gameRepository.currentUser.currentLevel)
+            _playerScore.postValue(gameRepository.currentUser.currentScore)
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.curiocity.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.curiocity.data.local.SharedPreferencesManager
 import com.example.curiocity.data.local.dao.LevelDao
 import com.example.curiocity.data.local.dao.UserDao
@@ -24,12 +26,18 @@ class GameRepository @Inject constructor(
 
     lateinit var currentUser: UserEntity
     private lateinit var usersDataList: List<UserEntity>
+    private val _currentLives = MutableLiveData<Int>()
+    val currentLives: LiveData<Int> = _currentLives
+    private val _playerScore = MutableLiveData(0)
+    val playerScore: LiveData<Int> = _playerScore
 
     suspend fun checkForExistingUser(): Boolean {
         val userId = sharedPreferencesManager.getUserUUID() ?: return false
         usersDataList = fetchUsers()
         val user = usersDataList.find { it.uuid == userId } ?: return false
         currentUser = user
+        _currentLives.postValue(currentUser.lives)
+        _playerScore.postValue(currentUser.currentScore)
         return true
     }
 
@@ -46,6 +54,8 @@ class GameRepository @Inject constructor(
             .setValue(user)
             .await()
         currentUser = user
+        _currentLives.postValue(currentUser.lives)
+        _playerScore.postValue(currentUser.currentScore)
         sharedPreferencesManager.saveUserUUID(user.uuid)
     }
 
@@ -76,24 +86,42 @@ class GameRepository @Inject constructor(
 
     suspend fun updateUserScore(score: Int) = withContext(Dispatchers.IO) {
         currentUser = currentUser.copy(currentScore = currentUser.currentScore + score)
-        userDao.updateUserScore(currentUser.id, currentUser.currentScore)
+        _playerScore.postValue(currentUser.currentScore)
+        userDao.updateUserScore(currentUser.uuid, currentUser.currentScore)
+        syncUserWithFirebase()
     }
 
     suspend fun updateUserLevel(level: Int) = withContext(Dispatchers.IO) {
         currentUser = currentUser.copy(currentLevel = level)
-        userDao.updateUserLevel(currentUser.id, level)
+        userDao.updateUserLevel(currentUser.uuid, level)
+        syncUserWithFirebase()
     }
 
     suspend fun updateUserQuestion(question: Int) = withContext(Dispatchers.IO) {
         currentUser = currentUser.copy(currentQuestion = question)
-        userDao.updateUserQuestion(currentUser.id, question)
+        userDao.updateUserQuestion(currentUser.uuid, question)
+        syncUserWithFirebase()
     }
 
-    suspend fun syncUserWithFirebase(user: UserEntity) = withContext(Dispatchers.IO) {
+    suspend fun updateUserLives(lives: Int) = withContext(Dispatchers.IO) {
+        currentUser = currentUser.copy(lives = lives)
+        _currentLives.postValue(lives)
+        syncUserWithFirebase()
+    }
+
+    suspend fun removeLifeFromPlayer() = withContext(Dispatchers.IO) {
+        currentUser = currentUser.copy(lives = currentUser.lives - 1)
+        _currentLives.postValue(currentUser.lives)
+
+        syncUserWithFirebase()
+    }
+
+
+    private suspend fun syncUserWithFirebase() = withContext(Dispatchers.IO) {
         firebaseDatabase.reference
             .child("players")
-            .child(user.uuid)
-            .setValue(user)
+            .child(currentUser.uuid)
+            .setValue(currentUser)
             .await()
     }
 
@@ -118,4 +146,15 @@ class GameRepository @Inject constructor(
             false
         }
     }
+
+    fun saveCurrentTime() =
+        sharedPreferencesManager.saveLastAppCloseTimestamp(System.currentTimeMillis())
+
+
+    fun loadLastCloseTimer() = sharedPreferencesManager.getLastAppCloseTimestamp()
+
+    fun saveLifeTimer(timer: Long) = sharedPreferencesManager.saveTimeUntilNextLife(timer)
+
+    fun loadLifeTimer() = sharedPreferencesManager.getTimeUntilNextLife()
+
 } 

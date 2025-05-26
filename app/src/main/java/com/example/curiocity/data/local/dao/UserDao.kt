@@ -22,15 +22,18 @@ interface UserDao {
     @Update
     suspend fun updateUser(user: UserEntity)
 
-    @Query("UPDATE users SET currentScore = :score WHERE id = :userId")
-    suspend fun updateUserScore(userId: Long, score: Int)
+    @Query("UPDATE users SET currentScore = :score WHERE uuid = :userId")
+    suspend fun updateUserScore(userId: String, score: Int)
 
-    @Query("UPDATE users SET currentLevel = :level WHERE id = :userId")
-    suspend fun updateUserLevel(userId: Long, level: Int)
+    @Query("UPDATE users SET currentLevel = :level WHERE uuid = :userId")
+    suspend fun updateUserLevel(userId: String, level: Int)
 
-    @Query("UPDATE users SET currentQuestion = :question WHERE id = :userId")
-    suspend fun updateUserQuestion(userId: Long, question: Int)
+    @Query("UPDATE users SET currentQuestion = :question WHERE uuid = :userId")
+    suspend fun updateUserQuestion(userId: String, question: Int)
 
     @Query("DELETE FROM users WHERE username = :username")
     suspend fun deleteUserByUsername(username: String)
+
+    @Query("UPDATE users SET lives = :lives WHERE uuid = :userId")
+    suspend fun updateUserLives(lives: Int, userId: String)
 } 

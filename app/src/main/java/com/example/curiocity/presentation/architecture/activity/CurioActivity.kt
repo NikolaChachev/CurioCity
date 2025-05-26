@@ -36,12 +36,14 @@ abstract class CurioActivity<B : ViewDataBinding, VM : CurioViewModel> : AppComp
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, getLayoutId())
+        binding.lifecycleOwner = this
         onBackPressedDispatcher.addCallback(this, callback)
 
     }
 
     protected abstract fun getLayoutId(): Int
     protected abstract fun getViewModelClass(): Class<VM>
+    protected abstract fun onViewChanged(viewClass: String)
 
     //region public methods
 
@@ -59,6 +61,11 @@ abstract class CurioActivity<B : ViewDataBinding, VM : CurioViewModel> : AppComp
         } else {
             navigateBack()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.onPause()
     }
 
     fun <T : AppCompatActivity> openActivity(activityClass: KClass<T>, args: Bundle? = null) {
@@ -103,6 +110,7 @@ abstract class CurioActivity<B : ViewDataBinding, VM : CurioViewModel> : AppComp
                 attachNewView(fm, containerViewId, viewName, args)
             }
             currentView = newView
+            onViewChanged(viewName)
         }
     }
 
@@ -168,6 +176,7 @@ abstract class CurioActivity<B : ViewDataBinding, VM : CurioViewModel> : AppComp
             if (viewClassName != null) {
                 val newView = popBackStackTo(fm, viewClassName, null)
                 currentView = newView
+                onViewChanged(viewClassName)
             }
         }
     }
