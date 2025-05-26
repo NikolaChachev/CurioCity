@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.lifecycleScope
+import com.example.curiocity.BR
 import com.example.curiocity.R
 import com.example.curiocity.databinding.FragmentHomeBinding
 import com.example.curiocity.presentation.architecture.fragment.CurioFragment
@@ -31,6 +32,7 @@ class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupObservers()
+        viewModel.updateData()
     }
 
     private fun setupObservers() {
@@ -95,7 +97,7 @@ class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
-    override fun getViewModelResId(): Int? = null
+    override fun getViewModelResId(): Int = BR.homeVM
 
     override fun getLayoutResId(): Int = R.layout.fragment_home
 

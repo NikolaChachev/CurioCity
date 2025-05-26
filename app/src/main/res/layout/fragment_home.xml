@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="homeVM"
+            type="com.example.curiocity.presentation.ui.home.HomeViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/home_layout"
@@ -15,10 +22,31 @@
             android:scaleType="fitXY"
             android:src="@drawable/home_screen_background" />
 
+        <TextView
+            android:id="@+id/home_score_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/home_background"
+            app:layout_constraintTop_toTopOf="@id/home_background"
+            android:text="@{@string/home_score_text(homeVM.playerScore)}"
+            android:layout_marginTop="40dp"
+            android:textSize="16sp"
+            android:layout_marginHorizontal="40dp"
+            tools:text="score: 10" />
+
+        <TextView
+            android:id="@+id/home_lives_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/home_lives_text(homeVM.currentLives)}"
+            app:layout_constraintStart_toStartOf="@id/home_score_text"
+            app:layout_constraintTop_toBottomOf="@id/home_score_text"
+            tools:text="lives: 3" />
+
         <ImageView
             android:id="@+id/home_fragment_level_3"
-            android:layout_width="@dimen/home_screen_out_level_icon_size"
-            android:layout_height="@dimen/home_screen_out_level_icon_size"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
             android:src="@drawable/paris_icon"
             app:layout_constraintBottom_toTopOf="@id/home_fragment_level_2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,8 +56,8 @@
 
         <ImageView
             android:id="@+id/home_fragment_level_2"
-            android:layout_width="@dimen/home_screen_out_level_icon_size"
-            android:layout_height="@dimen/home_screen_out_level_icon_size"
+            android:layout_width="145dp"
+            android:layout_height="145dp"
             android:src="@drawable/london_icon"
             app:layout_constraintBottom_toTopOf="@id/home_fragment_level_1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +80,7 @@
             android:id="@+id/home_play_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Play"
+            android:text="@string/home_play_button"
             app:layout_constraintTop_toBottomOf="@id/home_fragment_level_1"
             app:layout_constraintStart_toStartOf="@id/home_fragment_level_1"
             app:layout_constraintEnd_toEndOf="@id/home_fragment_level_1"

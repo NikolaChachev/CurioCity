@@ -9,12 +9,18 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "users")
 data class UserEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+
     val username: String = "",
     val currentScore: Int = 0,
     val currentLevel: Int = 1,
     val currentQuestion: Int = 1,
+    @PrimaryKey
     @get:Exclude
-    val uuid: String = ""
-) : Parcelable
+    val uuid: String = "",
+    val lives: Int = 5
+) : Parcelable {
+
+    companion object {
+        private const val MAX_LIVES = 5
+    }
+}
