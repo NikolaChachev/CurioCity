@@ -4,10 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <!-- Primary brand color. -->
     <color name="wine_red">#91223F</color>
-    <color name="star_blue">#3855a5</color>
-    <color name="colorPrimary">#4D301C</color> <!-- dark brown -->
+    <color name="colorPrimary">#2f2525</color> <!-- dark brown -->
     <!-- Secondary brand color. -->
-    <color name="colorSecondary">#FFF2D5</color> <!-- beige -->
+    <color name="colorSecondary">#867b70</color> <!-- dark beige -->
     <color name="colorSecondaryVariant">#3855A5</color> <!-- blue -->
     <color name="popup_background_color">#e3d6b0</color>
 </resources>

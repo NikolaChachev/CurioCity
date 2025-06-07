@@ -36,8 +36,9 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="16dp"
             android:padding="4dp"
-            android:background="@color/popup_background_color"
-            android:visibility="invisible"
+            android:background="@drawable/text_view_background"
+            android:backgroundTint="@color/colorSecondary"
+            android:visibility="visible"
             tools:text="Next life in: 01:59" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

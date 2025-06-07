@@ -8,7 +8,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/home_background"
+            android:id="@+id/game_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:importantForAccessibility="no"
@@ -46,6 +46,8 @@
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/colorSecondaryVariant"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
