@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.curiocity.data.local.entity.LevelEntity
 import com.example.curiocity.data.repository.GameRepository
 import com.example.curiocity.presentation.architecture.vm.CurioViewModel
+import com.example.curiocity.presentation.ui.ResourcesDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -25,7 +26,7 @@ sealed class AnswerState {
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val gameRepository: GameRepository
-) : CurioViewModel() {
+) : CurioViewModel(), ResourcesDataSource {
 
     private val _gameLevelInfo = MutableLiveData("")
     val gameLevelInfo: LiveData<String> = _gameLevelInfo
@@ -40,9 +41,9 @@ class GameViewModel @Inject constructor(
     private val _answerD = MutableLiveData("")
     val answerD: LiveData<String> = _answerD
 
-    val currentLives: LiveData<Int> = gameRepository.currentLives
+    override val currentLives: LiveData<Int> = gameRepository.currentLives
 
-    val playerScore: LiveData<Int> = gameRepository.playerScore
+    override val playerScore: LiveData<Int> = gameRepository.playerScore
 
     private val _answerState = MutableSharedFlow<AnswerState>().apply { AnswerState.Loading }
     val answerState: SharedFlow<AnswerState> = _answerState.asSharedFlow()

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="resourcesSource"
+            type="com.example.curiocity.presentation.ui.ResourcesDataSource" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
@@ -11,10 +18,10 @@
             android:id="@+id/lives_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            android:padding="5dp"
             android:background="@drawable/text_view_background"
             android:backgroundTint="@color/colorSecondary"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -31,10 +38,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="5"
+                android:text="@{@string/home_lives_text(resourcesSource.currentLives)}"
                 app:layout_constraintBottom_toBottomOf="@id/lives_icon"
                 app:layout_constraintStart_toEndOf="@id/lives_icon"
-                app:layout_constraintTop_toTopOf="@id/lives_icon" />
+                app:layout_constraintTop_toTopOf="@id/lives_icon"
+                tools:text="5" />
 
             <ImageView
                 android:id="@+id/lives_add"
@@ -50,11 +58,11 @@
             android:id="@+id/score_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            android:padding="5dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/text_view_background"
             android:backgroundTint="@color/colorSecondary"
-            android:layout_marginTop="8dp"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lives_layout">
 
             <ImageView
@@ -71,10 +79,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="5"
+                android:text="@{@string/home_score_text(resourcesSource.playerScore)}"
                 app:layout_constraintBottom_toBottomOf="@id/score_icon"
                 app:layout_constraintStart_toEndOf="@id/score_icon"
-                app:layout_constraintTop_toTopOf="@id/score_icon" />
+                app:layout_constraintTop_toTopOf="@id/score_icon"
+                tools:text="5" />
 
             <ImageView
                 android:id="@+id/score_add"
@@ -86,7 +95,6 @@
                 app:layout_constraintTop_toTopOf="@id/score_icon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
