@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="resourcesSource"
+            type="com.example.curiocity.presentation.ui.ResourcesDataSource" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lives_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_view_background"
+            android:backgroundTint="@color/colorSecondary"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/lives_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/heart_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/wine_red" />
+
+            <TextView
+                android:id="@+id/lives_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@{@string/home_lives_text(resourcesSource.currentLives)}"
+                app:layout_constraintBottom_toBottomOf="@id/lives_icon"
+                app:layout_constraintStart_toEndOf="@id/lives_icon"
+                app:layout_constraintTop_toTopOf="@id/lives_icon"
+                tools:text="5" />
+
+            <ImageView
+                android:id="@+id/lives_add"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/plus_icon"
+                app:layout_constraintStart_toEndOf="@id/lives_value"
+                app:layout_constraintTop_toTopOf="@id/lives_icon" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/score_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/text_view_background"
+            android:backgroundTint="@color/colorSecondary"
+            android:padding="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lives_layout">
+
+            <ImageView
+                android:id="@+id/score_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/star_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/star_blue" />
+
+            <TextView
+                android:id="@+id/score_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@{@string/home_score_text(resourcesSource.playerScore)}"
+                app:layout_constraintBottom_toBottomOf="@id/score_icon"
+                app:layout_constraintStart_toEndOf="@id/score_icon"
+                app:layout_constraintTop_toTopOf="@id/score_icon"
+                tools:text="5" />
+
+            <ImageView
+                android:id="@+id/score_add"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/plus_icon"
+                app:layout_constraintStart_toEndOf="@id/score_value"
+                app:layout_constraintTop_toTopOf="@id/score_icon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

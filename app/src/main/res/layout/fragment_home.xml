@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="homeVM"
             type="com.example.curiocity.presentation.ui.home.HomeViewModel" />
@@ -16,37 +16,28 @@
         tools:ignore="ContentDescription">
 
         <ImageView
-            android:id="@+id/home_background"
+            android:id="@+id/game_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@drawable/home_screen_background" />
 
-        <TextView
-            android:id="@+id/home_score_text"
+        <include
+            android:id="@+id/home_resource_layout"
+            layout="@layout/layout_resource"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/home_background"
-            app:layout_constraintTop_toTopOf="@id/home_background"
-            android:text="@{@string/home_score_text(homeVM.playerScore)}"
-            android:layout_marginTop="40dp"
-            android:textSize="16sp"
-            android:layout_marginHorizontal="40dp"
-            tools:text="score: 10" />
-
-        <TextView
-            android:id="@+id/home_lives_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{@string/home_lives_text(homeVM.currentLives)}"
-            app:layout_constraintStart_toStartOf="@id/home_score_text"
-            app:layout_constraintTop_toBottomOf="@id/home_score_text"
-            tools:text="lives: 3" />
+            android:layout_marginTop="70dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="@id/game_background"
+            app:layout_constraintTop_toTopOf="@id/game_background"
+            bind:resourcesSource="@{homeVM}"
+            />
 
         <ImageView
             android:id="@+id/home_fragment_level_3"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
+            android:layout_width="165dp"
+            android:layout_height="165dp"
             android:src="@drawable/paris_icon"
             app:layout_constraintBottom_toTopOf="@id/home_fragment_level_2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,8 +47,10 @@
 
         <ImageView
             android:id="@+id/home_fragment_level_2"
-            android:layout_width="145dp"
-            android:layout_height="145dp"
+            android:layout_width="165dp"
+            android:layout_height="165dp"
+            android:scaleY="1.2"
+            android:scaleX="1.2"
             android:src="@drawable/london_icon"
             app:layout_constraintBottom_toTopOf="@id/home_fragment_level_1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,8 +60,8 @@
 
         <ImageView
             android:id="@+id/home_fragment_level_1"
-            android:layout_width="@dimen/home_screen_out_level_icon_size"
-            android:layout_height="@dimen/home_screen_out_level_icon_size"
+            android:layout_width="165dp"
+            android:layout_height="165dp"
             android:src="@drawable/sofia_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

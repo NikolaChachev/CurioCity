@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.curiocity.data.repository.GameRepository
 import com.example.curiocity.presentation.architecture.vm.CurioViewModel
+import com.example.curiocity.presentation.ui.ResourcesDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,13 +16,13 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val gameRepository: GameRepository
-) : CurioViewModel() {
+) : CurioViewModel(), ResourcesDataSource {
 
     private val _currentLevel = MutableStateFlow(1)
     val currentLevel: StateFlow<Int> = _currentLevel.asStateFlow()
-    val currentLives: LiveData<Int> = gameRepository.currentLives
+    override val currentLives: LiveData<Int> = gameRepository.currentLives
     private val _playerScore = MutableLiveData<Int>()
-    val playerScore: LiveData<Int> = gameRepository.playerScore
+    override val playerScore: LiveData<Int> = gameRepository.playerScore
 
 
     fun updateData() {

@@ -206,6 +206,6 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
     override fun getViewModelClass(): Class<GameViewModel> = GameViewModel::class.java
 
     companion object {
-        const val TIMER_DURATION_IN_SECONDS = 20 * 1000L
+        const val TIMER_DURATION_IN_SECONDS = 40 * 1000L
     }
 }
