@@ -37,6 +37,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
+
     fun startLifeRegenerationTimer() {
         viewModelScope.launch {
 

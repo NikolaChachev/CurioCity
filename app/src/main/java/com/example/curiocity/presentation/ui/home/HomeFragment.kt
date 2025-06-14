@@ -23,6 +23,7 @@ class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
         binding.apply {
             setImageToLocked(homeFragmentLevel2)
             setImageToLocked(homeFragmentLevel3)
+            homePlayButton.isEnabled = false
             homePlayButton.setOnClickListener {
                 navigateToView(GameFragment::class)
             }
@@ -51,6 +52,9 @@ class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
                     }
                 }
             }
+        }
+        viewModel.currentLives.observe(viewLifecycleOwner) { lives ->
+            binding.homePlayButton.isEnabled = lives > 0
         }
     }
 

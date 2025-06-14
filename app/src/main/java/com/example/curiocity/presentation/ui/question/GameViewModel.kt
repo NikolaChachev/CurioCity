@@ -21,6 +21,7 @@ sealed class AnswerState {
     data object NoMoreQuestions : AnswerState()
     data object GameFinished : AnswerState()
     data object Loaded : AnswerState()
+    data object NoMoreLives : AnswerState()
 }
 
 @HiltViewModel
@@ -74,7 +75,6 @@ class GameViewModel @Inject constructor(
                 _answerState.emit(AnswerState.GameFinished)
                 return@launch
             }
-            gameRepository.updateUserLevel(currentLevel)
             levelEntity = level
             val currentQuestion = levelEntity.questions[currentQuestionIndex]
             with(currentQuestion) {
@@ -93,9 +93,7 @@ class GameViewModel @Inject constructor(
 
     fun loadNextQuestion() {
         viewModelScope.launch {
-            currentQuestionIndex++
             val currentQuestion = levelEntity.questions[currentQuestionIndex]
-            gameRepository.updateUserQuestion(currentQuestionIndex)
             with(currentQuestion) {
                 correctAnswer = answer
                 _questionString.postValue(question)
@@ -113,27 +111,43 @@ class GameViewModel @Inject constructor(
 
     fun loadNextLevel() {
         viewModelScope.launch {
-            currentLevel++
             getLevelData()
         }
     }
 
     fun checkAnswer(givenAnswer: String) {
+        if (correctAnswer == givenAnswer)
+            handleCorrectAnswer()
+        else
+            handleWrongAnswer()
+    }
+
+    private fun handleCorrectAnswer() {
         viewModelScope.launch {
-            if (correctAnswer == givenAnswer) {
-                gameRepository.updateUserScore(CORRECT_ANSWER_POINTS)
-                val state =
-                    if (currentQuestionIndex == levelEntity.questions.size - 1)
-                        AnswerState.NoMoreQuestions
-                    else {
-                        AnswerState.AnsweredCorrectly
-                    }
-                _answerState.emit(state)
-            } else {
-                gameRepository.updateUserScore(WRONG_ANSWER_POINTS)
-                gameRepository.removeLifeFromPlayer()
+            gameRepository.updateUserScore(CORRECT_ANSWER_POINTS)
+            val state =
+                if (currentQuestionIndex == levelEntity.questions.size - 1) {
+                    currentLevel++
+                    currentQuestionIndex = 0
+                    AnswerState.NoMoreQuestions
+                } else {
+                    currentQuestionIndex++
+                    AnswerState.AnsweredCorrectly
+                }
+            gameRepository.updateUserLevel(currentLevel)
+            gameRepository.updateUserQuestion(currentQuestionIndex + 1)
+            _answerState.emit(state)
+        }
+    }
+
+    private fun handleWrongAnswer() {
+        viewModelScope.launch {
+            gameRepository.updateUserScore(WRONG_ANSWER_POINTS)
+            gameRepository.removeLifeFromPlayer()
+            if (gameRepository.currentLives.value == 0)
+                _answerState.emit(AnswerState.NoMoreLives)
+            else
                 _answerState.emit(AnswerState.AnsweredIncorrectly)
-            }
         }
     }
 

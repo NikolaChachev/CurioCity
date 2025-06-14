@@ -13,6 +13,7 @@
         <item name="colorOnSurface">@color/white</item> // same as color on primary
 
         <!-- Status bar color. -->
+        <item name="android:windowActionBar">false</item>
         <item name="android:statusBarColor">@color/colorSecondaryVariant</item>
         <!-- Customize your theme here. -->
 
