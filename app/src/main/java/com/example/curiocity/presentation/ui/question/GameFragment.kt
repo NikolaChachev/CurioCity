@@ -36,9 +36,10 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
                         launchDialogFragment(
                             "Correct!",
                             "You answered correctly and gained 5 points, " +
-                                    "do you want to continue?",
+                                    "do you want to continue?\n ${state.fact}",
                             "Continue",
                             "Go Home",
+                            state.fact,
                             primaryClick = {
                                 viewModel.loadNextQuestion()
                                 animator.start()
@@ -55,6 +56,7 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
                             "Unfortunately that was the wrong answer!",
                             "Try again",
                             "Go Home",
+                            null,
                             primaryClick = {
                                 animator.start()
                             },
@@ -70,6 +72,7 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
                             "Do you want to continue to next level or go home?",
                             "Continue",
                             "Go Home",
+                            state.fact,
                             primaryClick = {
                                 updateUI(false)
                                 loadNextLevel()
@@ -86,6 +89,7 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
                             "Congrats! You look smart now!",
                             "Go Home",
                             null,
+                            state.fact,
                             primaryClick = {
                                 navigateBack()
                             },
@@ -107,6 +111,7 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
                             "You ran out of lives!",
                             "You need to either wait to recover lives or buy some!",
                             "Go Home",
+                            null,
                             null,
                             primaryClick = {
                                 navigateBack()
@@ -166,6 +171,7 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
             "You couldn't answer in time!",
             "Try again",
             "Go Home",
+            null,
             primaryClick = {
                 animator.start()
             },
@@ -197,6 +203,7 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
         message: String,
         primaryText: String,
         secondaryText: String?,
+        factText: String?,
         primaryClick: () -> Unit,
         secondaryClick: (() -> Unit)?
     ) {
@@ -206,6 +213,7 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
             message,
             primaryText,
             secondaryText,
+            factText,
             onPrimaryClick = primaryClick,
             onSecondaryClick = secondaryClick
         )

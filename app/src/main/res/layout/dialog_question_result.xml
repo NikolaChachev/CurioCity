@@ -22,14 +22,30 @@
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             tools:text="You lost!" />
+
+        <TextView
+            android:id="@+id/dialog_fact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:textColor="@color/colorPrimary"
+            tools:text="fun fact: if you dance around the tower of london then you can actually win the praise of the queen, and thus gain knighthood"
+            />
 
         <TextView
             android:id="@+id/dialogMessage"
             android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
             tools:text="The time ran out before you could answer!" />
+
+
 
         <LinearLayout
             style="?android:attr/buttonBarStyle"
@@ -41,16 +57,17 @@
             <Button
                 android:id="@+id/buttonSecondary"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:visibility="gone" />
 
             <Button
                 android:id="@+id/buttonPrimary"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" />
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </LinearLayout>

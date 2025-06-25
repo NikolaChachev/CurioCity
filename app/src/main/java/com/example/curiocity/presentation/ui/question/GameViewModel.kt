@@ -15,11 +15,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class AnswerState {
-    data object AnsweredCorrectly : AnswerState()
+    data class AnsweredCorrectly(val fact: String?) : AnswerState()
     data object AnsweredIncorrectly : AnswerState()
     data object Loading : AnswerState()
-    data object NoMoreQuestions : AnswerState()
-    data object GameFinished : AnswerState()
+    data class NoMoreQuestions(val fact: String?) : AnswerState()
+    data class GameFinished(val fact: String?) : AnswerState()
     data object Loaded : AnswerState()
     data object NoMoreLives : AnswerState()
 }
@@ -72,7 +72,8 @@ class GameViewModel @Inject constructor(
         viewModelScope.launch {
             val level = gameRepository.getCurrentLevelData(currentLevel)
             if (level == null) {
-                _answerState.emit(AnswerState.GameFinished)
+                val fact = levelEntity.questions.last().fact
+                _answerState.emit(AnswerState.GameFinished(fact))
                 return@launch
             }
             levelEntity = level
@@ -127,12 +128,14 @@ class GameViewModel @Inject constructor(
             gameRepository.updateUserScore(CORRECT_ANSWER_POINTS)
             val state =
                 if (currentQuestionIndex == levelEntity.questions.size - 1) {
+                    val fact = levelEntity.questions[currentQuestionIndex].fact
                     currentLevel++
                     currentQuestionIndex = 0
-                    AnswerState.NoMoreQuestions
+                    AnswerState.NoMoreQuestions(fact)
                 } else {
+                    val fact = levelEntity.questions[currentQuestionIndex].fact
                     currentQuestionIndex++
-                    AnswerState.AnsweredCorrectly
+                    AnswerState.AnsweredCorrectly(fact)
                 }
             gameRepository.updateUserLevel(currentLevel)
             gameRepository.updateUserQuestion(currentQuestionIndex + 1)

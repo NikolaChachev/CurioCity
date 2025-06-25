@@ -72,7 +72,7 @@ class MainViewModel @Inject constructor(
     }
 
     companion object {
-        const val LIFE_REGEN_INTERVAL = 120_000L // 2 minutes in milliseconds
+        const val LIFE_REGEN_INTERVAL = 10_000L // 2 minutes in milliseconds
         private const val MINUTE = 60_000L
         private const val SECOND = 1_000L
     }

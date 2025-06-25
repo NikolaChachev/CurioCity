@@ -10,5 +10,6 @@ data class QuestionEntity(
     val c: String = "",
     val d: String = "",
     val answer: String = "",
-    val question: String = ""
+    val question: String = "",
+    val fact: String? = null
 ) : Parcelable
