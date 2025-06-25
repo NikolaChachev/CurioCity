@@ -24,8 +24,8 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupAnimator(binding.gameTimerBar)
         setupObservers()
-        startCooldown(binding.gameTimerBar)
     }
 
     private fun setupObservers() {
@@ -98,7 +98,21 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
                     }
 
                     is AnswerState.Loaded -> {
+                        animator.start()
                         updateUI(true)
+                    }
+
+                    is AnswerState.NoMoreLives -> {
+                        launchDialogFragment(
+                            "You ran out of lives!",
+                            "You need to either wait to recover lives or buy some!",
+                            "Go Home",
+                            null,
+                            primaryClick = {
+                                navigateBack()
+                            },
+                            null
+                        )
                     }
                 }
             }
@@ -133,7 +147,7 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
     }
 
 
-    private fun startCooldown(bar: CooldownBarView) {
+    private fun setupAnimator(bar: CooldownBarView) {
         animator = ValueAnimator.ofFloat(1f, 0f)
         animator.duration = TIMER_DURATION_IN_SECONDS
         animator.interpolator = LinearInterpolator()
@@ -144,7 +158,6 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
                 onTimerEnd()
             }
         }
-        animator.start()
     }
 
     private fun onTimerEnd() {
@@ -206,6 +219,6 @@ class GameFragment : CurioFragment<FragmentGameBinding, GameViewModel>() {
     override fun getViewModelClass(): Class<GameViewModel> = GameViewModel::class.java
 
     companion object {
-        const val TIMER_DURATION_IN_SECONDS = 20 * 1000L
+        const val TIMER_DURATION_IN_SECONDS = 40 * 1000L
     }
 }

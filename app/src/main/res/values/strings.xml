@@ -3,5 +3,11 @@
     <string name="login_hint_text">Enter Username</string>
     <string name="login_button_text">Continue</string>
 
+    <string name="main_next_life_text">Next life in: %s</string>
+
+    <string name="home_score_text">score: %s</string>
+    <string name="home_lives_text">lives: %s</string>
+
     <string name="game_question_string">Question:\n %1$s</string>
+    <string name="home_play_button">Play</string>
 </resources>

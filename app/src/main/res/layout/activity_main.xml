@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="mainVM"
+            type="com.example.curiocity.presentation.MainViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,7 +22,24 @@
             app:defaultNavHost="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/fragment_home" />
+
+        <TextView
+            android:id="@+id/life_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/main_next_life_text(mainVM.timeUntilNextLife)}"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp"
+            android:padding="4dp"
+            android:background="@drawable/text_view_background"
+            android:backgroundTint="@color/colorSecondary"
+            android:visibility="visible"
+            tools:text="Next life in: 01:59" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
