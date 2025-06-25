@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.curiocity.data.local.SharedPreferencesManager
+import com.example.curiocity.data.local.UserLeaderboardModel
 import com.example.curiocity.data.local.dao.LevelDao
 import com.example.curiocity.data.local.dao.UserDao
 import com.example.curiocity.data.local.entity.LevelEntity
@@ -59,7 +60,7 @@ class GameRepository @Inject constructor(
         sharedPreferencesManager.saveUserUUID(user.uuid)
     }
 
-    suspend fun fetchUsers(): List<UserEntity> = withContext(Dispatchers.IO) {
+    private suspend fun fetchUsers(): List<UserEntity> = withContext(Dispatchers.IO) {
         val snapshot = firebaseDatabase.reference.child("players").get().await()
         val data = snapshot.children.map { dataShot ->
             dataShot.getValue(UserEntity::class.java)?.copy(uuid = dataShot.key ?: "")
@@ -145,6 +146,24 @@ class GameRepository @Inject constructor(
             Log.e("GameRepository", "Error deleting user: ${e.message}")
             false
         }
+    }
+
+    suspend fun getLeaderboard() = withContext(Dispatchers.IO) {
+        val sortedUsers = userDao.getAllUsers().sortedByDescending { it.currentScore }
+        val topTenUsers = sortedUsers.take(10).toMutableList()
+        val isCurrentUserInTopTen = topTenUsers.contains(currentUser)
+        val leaderboardModels = topTenUsers.mapIndexed { index, userEntity ->
+            UserLeaderboardModel(userEntity.username, userEntity.currentScore, index + 1)
+        }.toMutableList()
+        if(!isCurrentUserInTopTen)
+            leaderboardModels.addLast(
+                UserLeaderboardModel(
+                    currentUser.username,
+                    currentUser.currentScore,
+                    sortedUsers.indexOf(currentUser)
+                )
+            )
+        leaderboardModels
     }
 
     fun saveCurrentTime() =

@@ -3,6 +3,7 @@ package com.example.curiocity.presentation.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.curiocity.data.local.UserLeaderboardModel
 import com.example.curiocity.data.repository.GameRepository
 import com.example.curiocity.presentation.architecture.vm.CurioViewModel
 import com.example.curiocity.presentation.ui.ResourcesDataSource
@@ -23,6 +24,8 @@ class HomeViewModel @Inject constructor(
     override val currentLives: LiveData<Int> = gameRepository.currentLives
     private val _playerScore = MutableLiveData<Int>()
     override val playerScore: LiveData<Int> = gameRepository.playerScore
+    private val _leaderboardData = MutableLiveData<List<UserLeaderboardModel>>()
+    val leaderboardData: LiveData<List<UserLeaderboardModel>> = _leaderboardData
 
 
     fun updateData() {
@@ -30,6 +33,13 @@ class HomeViewModel @Inject constructor(
             gameRepository.fetchLevelsData()
             _currentLevel.emit(gameRepository.currentUser.currentLevel)
             _playerScore.postValue(gameRepository.currentUser.currentScore)
+        }
+    }
+
+    fun getLeaderboardData() {
+        viewModelScope.launch {
+            val data = gameRepository.getLeaderboard()
+            _leaderboardData.postValue(data)
         }
     }
 }

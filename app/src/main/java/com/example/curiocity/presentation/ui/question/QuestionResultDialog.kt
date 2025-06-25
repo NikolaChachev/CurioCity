@@ -13,6 +13,7 @@ class QuestionResultDialog(
     private val message: String,
     private val primaryButtonText: String,
     private val secondaryButtonText: String?,
+    private val factText: String?,
     private val onPrimaryClick: () -> Unit,
     private val onSecondaryClick: (() -> Unit)? = null
 ) : DialogFragment() {
@@ -37,6 +38,12 @@ class QuestionResultDialog(
                     dismiss()
                 }
             }
+        }
+        if (factText == null)
+            binding.dialogFact.visibility = View.GONE
+        else {
+            binding.dialogFact.visibility = View.VISIBLE
+            binding.dialogFact.text = factText
         }
 
         val dialog = AlertDialog.Builder(requireContext())

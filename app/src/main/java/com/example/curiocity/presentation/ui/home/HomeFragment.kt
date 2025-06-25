@@ -19,6 +19,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
 
+    private var isWaitingForDialog = false
+
     override fun onPrepareLayout(layoutView: View?) {
         binding.apply {
             setImageToLocked(homeFragmentLevel2)
@@ -26,6 +28,11 @@ class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
             homePlayButton.isEnabled = false
             homePlayButton.setOnClickListener {
                 navigateToView(GameFragment::class)
+            }
+            homeLeaderboardButton.isClickable = true
+            homeLeaderboardButton.setOnClickListener {
+                viewModel.getLeaderboardData()
+                isWaitingForDialog = true
             }
         }
     }
@@ -45,6 +52,7 @@ class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
                         setImageToUnlocked(binding.homeFragmentLevel2)
                         updatePlayButtonConstraints(binding.homeFragmentLevel2)
                     }
+
                     3 -> {
                         setImageToUnlocked(binding.homeFragmentLevel2)
                         setImageToUnlocked(binding.homeFragmentLevel3)
@@ -55,6 +63,13 @@ class HomeFragment : CurioFragment<FragmentHomeBinding, HomeViewModel>() {
         }
         viewModel.currentLives.observe(viewLifecycleOwner) { lives ->
             binding.homePlayButton.isEnabled = lives > 0
+        }
+        viewModel.leaderboardData.observe(viewLifecycleOwner) {
+            if (isWaitingForDialog){
+                val dialog = LeaderboardDialog(it)
+                dialog.show(parentFragmentManager, "leaderboardDialog")
+                isWaitingForDialog = false
+            }
         }
     }
 
