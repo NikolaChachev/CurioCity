@@ -19,8 +19,6 @@ class MainActivity : CurioActivity<ActivityMainBinding, MainViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        actionBar?.hide()
         super.onCreate(savedInstanceState)
         openView(LoginFragment::class)
         binding.setVariable(
