@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.curiocity.presentation.architecture.fragment.CurioFragment
 import com.example.curiocity.presentation.architecture.vm.CurioViewModel
+import com.example.curiocity.presentation.ui.username.LoginFragment
 import kotlin.reflect.KClass
 
 abstract class CurioActivity<B : ViewDataBinding, VM : CurioViewModel> : AppCompatActivity() {
@@ -103,6 +104,11 @@ abstract class CurioActivity<B : ViewDataBinding, VM : CurioViewModel> : AppComp
         }
         if (currentViewClassName != viewName) {
             val fm = supportFragmentManager
+
+            if (currentView is LoginFragment) {
+                fm.popBackStack()
+            }
+
             val existing = fm.findFragmentByTag(viewName)
             val newView: CurioFragment<*, *>? = if (existing != null) {
                 popBackStackTo(fm, viewName, args)
@@ -185,8 +191,7 @@ abstract class CurioActivity<B : ViewDataBinding, VM : CurioViewModel> : AppComp
     private fun handleBackPress() {
         ++numOfBackPressed
         if (numOfBackPressed == MAX_NUM_OF_BACK_PRESSES || skipBackMsg) {
-            onBackPressedDispatcher.onBackPressed()
-            callback.isEnabled = false
+            supportFinishAfterTransition()
         } else {
             handleExitMsg()
         }
@@ -239,7 +244,7 @@ abstract class CurioActivity<B : ViewDataBinding, VM : CurioViewModel> : AppComp
     companion object {
         private const val KEEP_IN_STACK_KEY = "keep_in_stack_key"
         const val ACTIVITY_BUNDLE_EXTRA_KEY = "activity_bundle_extra_key"
-        private const val MAX_NUM_OF_BACK_PRESSES = 1
+        private const val MAX_NUM_OF_BACK_PRESSES = 2
         private const val EXIT_MSG_DELAY_TIME: Long = 2000 // time in milliseconds
     }
 }
